@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap" rel="stylesheet">
+    <style type="text/css">
+        .height1rem {
+            height: "1rem";
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .card {
+            width: 500px;
+            border: 1px solid black;
+            border-radius: 2rem;
+            background-color: white;
+            padding: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 5px 5px 2px #44444488;
+        }
+
+        body {
+            background-color: #4f8cbb;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%23265ac1' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+
+<body style="font-family: 'Titillium Web', sans-serif;">
+    <div class=container>
+        <div class=card>
+            <img height=100rem src="https://www.smokealarmsolutions.com.au/images/2019/SAS%281%29.svg">
+            <h1>SAS Passwords Helper</h1>
+            <h2>Password Generator</h2>
+            <div id="SASPASS">🔍</div>
+            <button onClick="getWords()">Generate Random Password</button>
+            <h2>Password Checker</h2>
+            <label for="customPass">Password</label>
+            <input type="text" id="customPass" name="customPass" onkeyup="validatePassword();" maxlength="64" />
+            <p>
+                <span id="valMinLength" class="height1rem"></span>length is 10 or more<br>
+                <span id="valTwoUpperCase" class="height1rem"></span>Has two upper case characters<br>
+                <span id="valTwoDigits" class="height1rem"></span>Has two digits<br>
+                <span id="valTwoSymbols" class="height1rem"></span>Has two symbols<br>
+                <span id="valLegalCharacters" class="height1rem"></span>Only contains allowed characters
+            </p>
+            <p></p>
+            <h2>Password Rules</h2>
+            <p>Allowed Characters:<br>
+            <ul>
+                <li>Lowercase characters - a → z</li>
+                <li>Uppercase characters - A → Z</li>
+                <li>Digits - 0 → 9</li>
+                <li>Symbols - @ # $ % ^ & * - _ ! + = [ ] { } | \ : ' , . ? / ` ~ " ( ) ; &#60; &#62; </li>
+                <li>Spaces</li>
+            </ul>
+            </p>
+            <p>Unallowed Characters:<br>
+            <ul>
+                <li>Diatrics - ç é Ö ř ñ</li>
+                <li>Non-latin characters - अ α 한 й گ ｧ</li>
+                <li>Unicode / emojies - © ½ █ ◐ 👉😀🏍 </li>
+            </ul>
+            </p>
+        </div>
+    </div>
+    <script>
+        var word1 = "";
+        var word2 = "";
+
+        const crossIcon = '<svg style="height:1rem;color:maroon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"> <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />  </svg> ';
+
+
+        const tickIcon = ' <svg style="height:1rem;color:green" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg> ';
+
+        const symbols = ['@', '#', '$', '%', '^', '&', '*', '-', '_', '!', '+', '=', '[', ']', '{', '}', '|', '\\', ':', '\'', ',', '.', '?', '/', '`', '~', '\"', '(', ')', ';', '<', '>'];
+
+        const spaceChars = ['_', '|', '_', '-', '.', '\\', '/', ':'];
+
+        const groupCharacters = [
+            ['(', ')'],
+            ['[', ']'],
+            ['{', '}'],
+            ['<', '>'],
+            ['|', '|']
+        ];
+
+        async function getWords() {
+            var SASPASS = document.getElementById("SASPASS");
+            SASPASS.innerText = "🔍";
+            do {
+                const fetch1 = fetch('https://random-word-form.herokuapp.com/random/adjective');
+                const response1 = await fetch1;
+                const json1 = await response1.json();
+                word1 = json1[0];
+                const fetch2 = fetch('https://random-word-form.herokuapp.com/random/noun');
+                const response2 = await fetch2;
+                const json2 = await response2.json();
+                word2 = json2[0];
+                SASPASS.innerText += "🔍";
+
+            } while (word1.length + word2.length > 15);
+            setpassword();
+        }
+        function validatePassword() {
+            const valMinLength = document.getElementById("valMinLength");
+            const valTwoUppercase = document.getElementById("valTwoUpperCase");
+            const valTwoDigits = document.getElementById("valTwoDigits");
+            const valTwoSymbols = document.getElementById("valTwoSymbols");
+            const valLegalCharacters = document.getElementById("valLegalCharacters");
+            const pass = document.getElementById("customPass").value;
+            var upperCaseCount = 0;
+            var digitCount = 0;
+            var symbolCount = 0;
+            var illegalChars = false;
+            for (var i = 0; i < pass.length; i++) {
+                var char = pass[i];
+
+                if (char.match(/[A-Z]/)) upperCaseCount++;
+                else if (char.match(/[0-9]/)) digitCount++;
+                else if (symbols.indexOf(char) > -1) symbolCount++;
+                else if (!(char.match(/[a-z]/) || char == ' ')) illegalChars = true;
+            }
+            valMinLength.innerHTML = pass.length >= 10 ? tickIcon : crossIcon;
+            valTwoUpperCase.innerHTML = upperCaseCount >= 2 ? tickIcon : crossIcon;
+            valTwoDigits.innerHTML = digitCount >= 2 ? tickIcon : crossIcon;
+            valTwoSymbols.innerHTML = symbolCount >= 2 ? tickIcon : crossIcon;
+            valLegalCharacters.innerHTML = !illegalChars ? tickIcon : crossIcon;
+        }
+
+        function setpassword() {
+            // Make words title case
+            word1 = "" + word1[0].toUpperCase() + word1.slice(1);
+            word2 = "" + word2[0].toUpperCase() + word2.slice(1);
+            //grab some random symbols
+            var symbol1 = symbols[Math.floor(Math.random() * symbols.length)];
+            var symbol2 = symbols[Math.floor(Math.random() * symbols.length)];
+            var spaceChar = spaceChars[Math.floor(Math.random() * spaceChars.length)];
+            var groupChars = groupCharacters[Math.floor(Math.random() * groupCharacters.length)];
+            var randomPass = "";
+            var pattern = Math.floor(Math.random() * 5);
+            switch (pattern) {
+                case 0:
+                    randomPass = word1 + spaceChar + word2 +
+                        Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + symbol1;
+                    break;
+                case 1:
+                    randomPass = word1 + spaceChar + word2 + spaceChar +
+                        Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10);
+                    break;
+                case 2:
+                    randomPass = groupChars[0] + word1 + word2 + groupChars[1] +
+                        Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10);
+                    break;
+                case 3:
+                    randomPass = groupChars[0] + word1 + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + word2 + groupChars[1];
+                    break;
+                case 4:
+                    randomPass =
+                        "" + Math.floor(Math.random() * 10) + Math.floor(Math.random() * 10) + word1 + word2 + symbol1 + symbol2;
+                    break;
+            }
+            var SASPASS = document.getElementById("SASPASS");
+            SASPASS.innerText = randomPass;
+        }
+        validatePassword();
+        getWords();
+    </script>
+</body>
+
+</html>
